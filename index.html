@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>专利录入系统</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 登录界面 -->
+    <div id="loginForm" class="login-container">
+        <div class="login-box">
+            <h2>专利录入系统</h2>
+            <div class="input-group">
+                <label for="password">请输入访问密码：</label>
+                <input type="password" id="password" required>
+            </div>
+            <button onclick="login()">登录</button>
+            <button onclick="showChangePassword()" class="change-password-btn">修改密码</button>
+        </div>
+    </div>
+
+    <!-- 添加修改密码的弹窗 -->
+    <div id="changePasswordModal" class="modal">
+        <div class="modal-content">
+            <h3>修改密码</h3>
+            <div class="input-group">
+                <label for="oldPassword">原密码：</label>
+                <input type="password" id="oldPassword" required>
+            </div>
+            <div class="input-group">
+                <label for="newPassword">新密码：</label>
+                <input type="password" id="newPassword" required>
+            </div>
+            <div class="input-group">
+                <label for="confirmPassword">确认新密码：</label>
+                <input type="password" id="confirmPassword" required>
+            </div>
+            <div class="button-group">
+                <button onclick="changePassword()">确认修改</button>
+                <button onclick="hideChangePassword()" class="cancel-btn">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主界面容器，初始隐藏 -->
+    <div id="mainContainer" class="container" style="display: none;">
+        <!-- 录入表单 -->
+        <div id="inputForm" class="form-section">
+            <h2>专利信息录入</h2>
+            
+            <!-- 专利名称和类型 -->
+            <div class="patent-info-section">
+                <div class="patent-info-row">
+                    <div class="input-group">
+                        <label for="patentName">专利名称：</label>
+                        <input type="text" id="patentName" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="patentType">专利类型：</label>
+                        <select id="patentType" required>
+                            <option value="">请选择专利类型</option>
+                            <option value="发明专利">发明专利</option>
+                            <option value="实用新型专利">实用新型专利</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 发明人和分配比例 -->
+            <div class="form-container">
+                <!-- 左侧：发明人输入 -->
+                <div class="input-column">
+                    <h3>发明人信息</h3>
+                    <div class="input-group">
+                        <label for="inventor1">发明人1：</label>
+                        <input type="text" id="inventor1" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="inventor2">发明人2：</label>
+                        <input type="text" id="inventor2">
+                    </div>
+                    <div class="input-group">
+                        <label for="inventor3">发明人3：</label>
+                        <input type="text" id="inventor3">
+                    </div>
+                    <div class="input-group">
+                        <label for="inventor4">发明人4：</label>
+                        <input type="text" id="inventor4">
+                    </div>
+                    <div class="input-group">
+                        <label for="inventor5">发明人5：</label>
+                        <input type="text" id="inventor5">
+                    </div>
+                    <div class="input-group">
+                        <label for="inventor6">发明人6：</label>
+                        <input type="text" id="inventor6">
+                    </div>
+                </div>
+                
+                <!-- 右侧：奖励分配比例输入 -->
+                <div class="input-column">
+                    <h3>奖励分配比例</h3>
+                    <div class="input-group">
+                        <label for="ratio1">分配比例1：</label>
+                        <input type="number" id="ratio1" min="0" max="100" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="ratio2">分配比例2：</label>
+                        <input type="number" id="ratio2" min="0" max="100">
+                    </div>
+                    <div class="input-group">
+                        <label for="ratio3">分配比例3：</label>
+                        <input type="number" id="ratio3" min="0" max="100">
+                    </div>
+                    <div class="input-group">
+                        <label for="ratio4">分配比例4：</label>
+                        <input type="number" id="ratio4" min="0" max="100">
+                    </div>
+                    <div class="input-group">
+                        <label for="ratio5">分配比例5：</label>
+                        <input type="number" id="ratio5" min="0" max="100">
+                    </div>
+                    <div class="input-group">
+                        <label for="ratio6">分配比例6：</label>
+                        <input type="number" id="ratio6" min="0" max="100">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 按钮部分 -->
+            <div class="button-section">
+                <button onclick="submitPatent()">录入</button>
+                <button onclick="showTable()" class="skip-button">跳过</button>
+            </div>
+        </div>
+
+        <!-- 数据表格部分保持不变 -->
+        <div id="dataTable" class="table-section" style="display: none;">
+            <h2>专利信息列表</h2>
+            <div class="button-group">
+                <button onclick="exportToExcel()">导出Excel</button>
+                <button onclick="backToForm()">返回录入</button>
+                <button onclick="logout()" class="logout-button">退出登录</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>专利名称</th>
+                        <th>专利类型</th>
+                        <th>发明人</th>
+                        <th>分配比例</th>
+                        <th>金额</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="patentTableBody">
+                </tbody>
+            </table>
+
+            <!-- 统计信息部分 -->
+            <div class="statistics-section">
+                <!-- 专利类型统计 -->
+                <div class="stat-block">
+                    <h3>专利类型统计</h3>
+                    <table id="typeStatsTable">
+                        <thead>
+                            <tr>
+                                <th>专利类型</th>
+                                <th>数量</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <!-- 发明人参���统计 -->
+                <div class="stat-block">
+                    <h3>发明人参与统计</h3>
+                    <table id="inventorStatsTable">
+                        <thead>
+                            <tr>
+                                <th>发明人</th>
+                                <th>参与专利数</th>
+                                <th>总奖励比例</th>
+                                <th>总金额</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <!-- 专利类型-发明人交叉统计 -->
+                <div class="stat-block">
+                    <h3>专利类型-发明人交叉统计</h3>
+                    <table id="crossStatsTable">
+                        <thead>
+                            <tr>
+                                <th>发明人</th>
+                                <th>发明专利数</th>
+                                <th>实用新型专利数</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        // 导入 Firebase 所需的函数
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
+        import { getDatabase, ref, set, get, onValue } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js';
+
+        // Firebase 配置
+        const firebaseConfig = {
+            apiKey: "你的_API_KEY",
+            authDomain: "你的项目域名",
+            databaseURL: "你的数据库URL",
+            projectId: "你的项目ID",
+            storageBucket: "你的存储桶",
+            messagingSenderId: "你的消息发送者ID",
+            appId: "你的应用ID"
+        };
+
+        // 初始化 Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // 将数据库实例和函数暴露给全局作用域
+        window.db = {
+            database,
+            ref,
+            set,
+            get,
+            onValue
+        };
+    </script>
+    <script src="script.js"></script>
+</body>
+</html> 
